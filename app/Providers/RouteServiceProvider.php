@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -28,13 +28,22 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
+        // 前台網頁 Route 設定
+        Route::domain(env('WEB_DOMAIN', 'localhost'))
+        ->middleware('web') //這個是使用 app/Http/kernel.php 裡面的 middlewareGroups
+        ->namespace($this->namespace)
+        ->group(base_path('routes/web.php'));
 
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-        });
+        // 後台網頁 Route 設定
+        Route::domain(env('ADMIN_DOMAIN', 'admin.localhost'))
+        ->middleware('web')
+        ->namespace($this->namespace)
+        ->group(base_path('routes/admin.php'));
+
+        //API Route 設定
+        Route::domain(env('API_DOMAIN', 'api.localhost'))
+        ->middleware('api')
+        ->namespace($this->namespace)
+        ->group(base_path('routes/api.php'));
     }
 }
