@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return "newCodingLab 前台";
+    return view('web.welcome');
+});
+
+Route::name('web.')->group(function() {
+    Route::get('aboutme', function () { return view('web.aboutme'); });
+    Route::get('/', [HomeController::class, 'index'])->name('index');
 });

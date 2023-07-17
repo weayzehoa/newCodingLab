@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE','UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => env('APP_LOCALE','en'),
 
     /*
     |--------------------------------------------------------------------------
@@ -160,6 +160,9 @@ return [
          * Package Service Providers...
          */
 
+         // integrate Google reCAPTCHA v3, v2 or hCAPTCHA
+        Martian\LaraCaptcha\Providers\LaraCaptchaServiceProvider::class,
+        Ixudra\Curl\CurlServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -183,6 +186,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Curl' => Ixudra\Curl\Facades\Curl::class,
     ])->toArray(),
 
 ];
